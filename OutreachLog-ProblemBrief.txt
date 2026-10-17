@@ -1,1 +1,76 @@
+1. Outreach Log
+Person: Dr. Jimmie Adriazola
+Role/unit: Postdoc → assistant professor, School of Mathematical and Statistical Sciences (SMSS), ASU
+How Found: Course candidate-researcher table
+Outcome: Interviewed by Zoom on 10/16/2026. He gave us a specific research problem, a published model, and two example experiments (see Section 2). He agreed to help if we get stuck and asked to receive our results.
 
+2. Problem brief
+2.1 The scientific problem and why it matters
+
+A Bose–Einstein condensate (BEC) is a cloud of ultra-cold atoms that behaves like a single quantum wave. Such condensates are used in precision measurement, quantum information storage, and quantum simulation. Many of these uses require the condensate to be reshaped quickly into a specific target shape, for example squeezed from a wide cloud into a narrow one, or split into two separate clouds. The reshaping is done by changing the confining field (a magnetic or optical trap) over time. This change is called the control, $u(t)$.
+
+The difficulty is that reshaping excites the condensate. If the trap is simply ramped to its final setting, the cloud arrives roughly in the right place but keeps oscillating (like a ripple that never dies out) and so does not match the desired stationary shape. Optimal control designs $u(t)$ so that the cloud arrives at the target shape and stays there after the control stops. Better controls mean cleaner prepared states and faster experimental cycles.
+
+Dr. Adriazola's interest is in using machine learning to make this kind of control cheaper to compute. In his words, he wants to "solve control problems more efficiently" and has proposed this problem as an idea for us to test.
+
+2.2 The mathematical model
+
+The problem we are studying is defined by Eqs. (2)–(4) of Adriazola and Goodman (2022). In dimensionless form, we seek the control $u$ that minimizes
+
+$$J(u)=\frac12\Big[\,\underbrace{1-\big|\langle \psi_d,\ \psi(\cdot,T)\rangle\big|^2}_{J^{\text{infidelity}}}\;+\;\underbrace{\gamma\int_0^T |\dot u(t)|^2\,dt}_{J^{\text{regular}}}\Big],$$
+
+where $\psi(x,t)$ is the complex-valued condensate wave function, subject to the Gross–Pitaevskii equation (GPE)
+
+$$
+i\,\partial_t\psi \;=\; -\tfrac12\,\partial_x^2\psi \;+\; V\big(x,u(t)\big)\,\psi \;+\; |\psi|^2\psi,
+\qquad \psi(x,0)=\psi_0(x),\qquad \|\psi(\cdot,t)\|_{L^2}=1 .
+$$
+$\psi_d$ is the desired final state, and $J^{\text{infidelity}}$ measures how far the final wave misses it. It equals 0 when $\psi(T)$ matches $\psi_d$ up to a phase.
+$J^{\text{regular}}$ penalizes rapidly varying controls, which are experimentally unrealistic and make the problem ill-posed. The paper uses $\gamma = 10^{-4}$.
+The control has fixed endpoints, $u(0)=u_0$ and $u(T)=u_T$.
+$|\psi|^2\psi$ is the nonlinear term that distinguishes the GPE from the ordinary (linear) Schrödinger equation. The equation as originally discussed in the interview was the linear Schrödinger equation, but the paper's model, which we follow, is the nonlinear GPE.
+
+Example 1: squeezing. The potential is $V(x,u)=\tfrac12 u(t)\,x^2$, a quadratic trap that steepens over time, with $u_0=1$, $u_T=100$ and $T=2.5$. A wide packet must be compressed while minimizing leftover oscillation. The paper's baseline control is the linear ramp $u(t)=u_0+(u_T-u_0)\,t/T$ (Eq. 21).
+
+Example 2: splitting (extension only). The potential is $V(x,u)=\tfrac12 x^2+u(t)\,\delta(x)$, a trap with a rising central barrier, with $u_0=0$, $u_T=30$ and $T=10$. One packet must separate into two stable peaks. The $\delta$-function barrier is singular, so a numerical implementation requires a narrow smoothed barrier. We treat splitting as optional.
+
+In both examples the desired final shape should remain approximately stationary after the control ends.
+
+2.3 Current solution method and its cost
+
+The paper does not optimize the full PDE directly. It first reduces the GPE to a low-dimensional Hamiltonian ODE system using a Galerkin expansion in the instantaneous eigenfunctions of the trap and canonical transformations, and then:
+
+Global search: the control is parameterized by a linear ramp plus 15 sine modes (the CRAB basis), and the coefficients are searched with differential evolution (population 40, up to 30 generations).
+Local refinement: a GRAPE-type gradient descent with Armijo backtracking, using a Sobolev-space gradient that preserves the control's boundary conditions (applied to squeezing; omitted for splitting).
+Validation: the resulting controls are tested in the full 1-D GPE, solved with a second-order split-step Fourier method.
+
+The paper reports that squeezing optimization averages about 30 seconds on a 2.6 GHz 6-core laptop and splitting takes 3–5 minutes (splitting is slower because each objective evaluation computes costly inner products). [Verify with Dr. Adriazola that these timings refer to the reduced-model optimization, not full-GPE optimization.] The paper shows that for squeezing, the hybrid method lowers the final infidelity by about an order of magnitude relative to the linear ramp, whose oscillations persist after the control ends.
+
+2.4 Specific challenges and the bottleneck
+Cost of repeated solves. Evaluating a control requires integrating the GPE from $t=0$ to $T$. Optimization needs many such evaluations (and gradients), and global search methods such as differential evolution need many more. In one space dimension a single solve is cheap with a pseudospectral method, and Dr. Adriazola said so explicitly. The paper's motivation, though, is the three-dimensional problem (Mennemann et al., 2015), where the same many-solve structure becomes expensive. Our one-dimensional case is therefore a deliberately small test of the many-query structure, not of an expensive single solve.
+Non-convexity. The objective has many local minima. Gradient descent from the linear ramp "approximately halves" the objective but leaves a significant oscillation (the paper's Fig. 10), which motivated the global search.
+Reduction accuracy. The reduced model drops higher modes and the weak nonlinearity assumption limits its validity (the paper reports up to ~3% mass discrepancy between the PDE and the projection). Dr. Adriazola asked us to avoid the reduction and solve the full PDE.
+Gradient computation. For splitting, differentiating through the eigenfunction projections was described as "unmanageable," which is why only the global step is used there. Automatic differentiation through a numerical PDE solver could sidestep this, and we plan to test that.
+2.5 Prior ML attempts and the idea we were given
+
+Dr. Adriazola has published on machine learning and optimal control, but in the interview he did not describe a prior neural-operator attempt on this problem. [Confirm in the review.] He recommended a neural operator over an ordinary PINN. A PINN represents one solution of one PDE instance and must be retrained when the control changes. A neural operator learns the whole solution map, so it can be queried for many different controls. His proposed test:
+
+Learn a control-parameterized solution operator $u(\cdot)\mapsto\psi(\cdot,T)$ for the GPE, then query it inside the optimization loop in place of the PDE solver, and measure the speed advantage against conventional optimization.
+
+His instructions to us, in order:
+
+Implement a conventional numerical solver (split-step Fourier or exponential time differencing) and conventional optimal control, and reproduce the squeezing behavior (a squeezed packet that stays stationary). This is the benchmark.
+Train a neural operator parameterized by the control.
+Optimize through the operator and compare with the benchmark.
+Do not reproduce the Galerkin reduction or Hamiltonian transformations. Squeezing first, splitting if time allows. Whether to use optimize-then-discretize or discretize-then-optimize is our choice.
+2.6 What would count as success
+
+Dr. Adriazola's criterion is a demonstrated speed advantage of operator-based optimization over traditional PDE-constrained optimization at comparable accuracy. We add the course's requirements: accuracy is checked in the true PDE solver, training cost (including data generation) is counted, and we report the break-even number of optimization runs $N^\star = T_{\text{train}}/(T_{\text{sol}}-T_{\text{inf}})$. We have not yet obtained from him the number of solves or the infidelity he would consider useful. [Fill in after his reply.]
+
+2.7 Researcher review
+
+Status: [Sent to Dr. Adriazola on DATE. / Reviewed on DATE with the following corrections: ... / No response by DATE.]
+
+2.8 Source
+
+J. Adriazola and R. H. Goodman, "A Reduction-Based Strategy for Optimal Control of Bose–Einstein Condensates," Physical Review E (2022); arXiv:2111.14266. Interview with Dr. Adriazola, [date]. Mennemann et al., New J. Phys. 17, 113027 (2015) (three-dimensional reshaping examples).
