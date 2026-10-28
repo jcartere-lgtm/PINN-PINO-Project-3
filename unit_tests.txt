@@ -1,0 +1,18 @@
+test_empty_training_split_is_rejected (test_operator.OperatorTests) ... ok
+test_linear_harmonic_wave_has_zero_complex_residual (test_operator.OperatorTests) ... ok
+test_nonlinear_constant_wave_has_zero_complex_residual (test_operator.OperatorTests) ... ok
+test_single_time_prediction_uses_physical_time (test_operator.OperatorTests) ... ok
+test_whole_control_train_validation_overlap_is_rejected (test_operator.OperatorTests) ... ok
+test_control_construction_preserves_endpoints_and_allows_nonmonotone_paths (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_fidelity_ignores_global_phase_but_detects_spatial_phase (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_free_fourier_mode_has_exact_complex_phase (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_linear_ramp_has_analytic_derivative_cost (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_mass_is_conserved_under_changing_nonlinear_trap (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_nonlinear_ground_states_satisfy_stationary_pde (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_normalized_complex_state_has_unit_mass (test_project3.ConventionalGPEPhysicsTests) ... ok
+test_stationary_density_is_preserved_and_time_refinement_helps (test_project3.ConventionalGPEPhysicsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.224s
+
+OK
