@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+.cache/
+.mplconfig/
+output/integration_reference/
+output/integration_verification/
+output/reproduced_*/
+output/integration_check/
+output/project3/*.npz
+*.zip

@@ -1,0 +1,44 @@
+{
+  "full": {
+    "all_arrays_exactly_equal": true,
+    "keys": {
+      "x": true,
+      "t": true,
+      "psi": true,
+      "knot_values": true,
+      "psi0": true,
+      "train_indices": true,
+      "val_indices": true,
+      "test_indices": true,
+      "dx": true
+    },
+    "original": "output/project3/reference_dataset.npz",
+    "regenerated": "output/submission_checks/full_reference_regeneration/reference_dataset.npz",
+    "shape": [
+      120,
+      129,
+      256
+    ]
+  },
+  "quick": {
+    "all_arrays_exactly_equal": true,
+    "keys": {
+      "x": true,
+      "t": true,
+      "psi": true,
+      "knot_values": true,
+      "psi0": true,
+      "train_indices": true,
+      "val_indices": true,
+      "test_indices": true,
+      "dx": true
+    },
+    "original": "output/quick_pilot/reference_dataset.npz",
+    "regenerated": "output/submission_checks/quick_reference_regeneration/output/quick_pilot/reference_dataset.npz",
+    "shape": [
+      36,
+      65,
+      256
+    ]
+  }
+}
