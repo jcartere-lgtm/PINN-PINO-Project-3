@@ -1,0 +1,7 @@
+# Exact core versions used for the local CPU verification, not a portable lockfile.
+# Tested with Python 3.9.6 on Apple M2 Pro / Darwin arm64.
+numpy==2.0.2
+scipy==1.13.1
+torch==2.8.0
+matplotlib==3.9.4
+pandas==2.3.3
