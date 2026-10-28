@@ -1,7 +1,0 @@
-{
-  "original_file": "output/project3/control_validation.json",
-  "original_sha256": "70f09a84e4f95fc7f5e7a155f557e2649bbbe50d1263ff35b67c9e271bb19204",
-  "public_file": "submission_evidence/control_validation.json",
-  "public_sha256": "7baf8adc53fbd209b0e9dd5657301af59bb8d1a2ca976dfbc8f133ce190f6206",
-  "transformation": "Only source_results changed from an absolute account path to a relative repository path. No numerical field changed."
-}

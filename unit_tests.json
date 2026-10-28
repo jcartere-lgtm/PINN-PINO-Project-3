@@ -1,8 +1,0 @@
-{
-  "command": "python -B -m unittest discover -s tests -v",
-  "exit_code": 0,
-  "tests_run": 13,
-  "passed": true,
-  "elapsed_seconds": 2.5033990409999998,
-  "python": "3.9.6"
-}
