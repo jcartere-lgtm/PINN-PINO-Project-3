@@ -110,9 +110,9 @@ The solver applies potential/nonlinear half-steps around a full Fourier kinetic 
 
 The baseline RMS width decreases from 0.7071 to 0.3355, a 52.56% reduction. The width diagnostic is the second moment about zero; the centered, even setup makes this consistent with a centered width. Squeezing is not equivalent to high target fidelity.
 
-![Initial and final densities under the linear control](figures/p1_baseline.png)
+![Initial and final densities under the linear control](p1_baseline.png)
 
-![Baseline density evolution; this is not neural prediction error](figures/baseline_spacetime.png)
+![Baseline density evolution; this is not neural prediction error](baseline_spacetime.png)
 
 Refinement checks cover the linear ramp and five validation controls. Time refinement halves the step at $N=512$; spatial checks compare 512, 1,024, and 2,048 points at the finer step.
 
@@ -147,7 +147,7 @@ Data/IC terms compare real and imaginary components. The periodic boundary term 
 
 Adam uses learning rate 0.001 for 500 updates. Every 50 updates, and at update one, a fixed 2,048-point validation sample is evaluated; the best sampled-validation checkpoint is retained. The raw PDE loss initially exceeds the other losses by many orders of magnitude. Its multiplier is a heuristic fixed scaling, not a researcher-approved or optimized choice.
 
-![Raw and weighted PINN loss components on logarithmic axes](figures/p2_pinn_losses.png)
+![Raw and weighted PINN loss components on logarithmic axes](p2_pinn_losses.png)
 
 The saved training log reduces the raw PDE loss from about $2.49\times10^4$ to 8.085 and boundary loss from 0.002931 to about $1.09\times10^{-5}$. Yet full space–time validation error is 99.54%. The low residual is not evidence of a correct state.
 
@@ -162,7 +162,7 @@ Errors are relative discrete complex $L^2$ errors over each complete sampled spa
 | 1.0 | 52.8016 | 95.8485 | 0.6419 | 0.0417 |
 | 2.5 | 97.2959 | 99.5200 | 0.0459 | 0.0023 |
 
-![Relative space–time error versus training and observation horizon](figures/p3_horizon.png)
+![Relative space–time error versus training and observation horizon](p3_horizon.png)
 
 Both approaches deteriorate as this family becomes more demanding. The physics-informed model is worse at intermediate horizons and approaches zero probability at the longest horizon. This establishes sensitivity under a fixed training budget; it does not prove a causality violation or isolate temporal frequency, sample density, and optimizer effects.
 
@@ -170,9 +170,9 @@ Both approaches deteriorate as this family becomes more demanding. The physics-i
 
 The first validation trajectory is used for the full space–time visualization. Reference and predicted densities share a color scale; the third panel shows absolute complex-wave error. The spectrum is the RMS spatial Fourier magnitude of the **complex error**, averaged over saved times across the full box, with FFT scaling by $\Delta x$. It is not a comparison of solution spectra.
 
-![Reference density, PINN density, and absolute complex-wave error](figures/p4_spacetime.png)
+![Reference density, PINN density, and absolute complex-wave error](p4_spacetime.png)
 
-![Spatial Fourier spectrum of the complex prediction error](figures/p4_error_spectrum.png)
+![Spatial Fourier spectrum of the complex prediction error](p4_error_spectrum.png)
 
 Main PINN probability ranges remain between approximately zero and 0.0227, compared with reference probability one. The zero wave satisfies the homogeneous GPE and periodic boundaries. The observed near-zero output explains how low residuals coexist with a missed condensate; it does not establish why optimization selected that output. An error spectrum alone cannot establish spectral bias.
 
@@ -189,11 +189,11 @@ Both struggle even on training controls. Generalization alone is therefore insuf
 
 **FNO dataset-size comparison.** Identical initial weights and 150 Adam updates give validation error 74.41% with 20 training examples and 55.16% with 100. Validation MSE falls from 0.018626 to 0.010653. This supports a data-size contribution to this separate model's error; it does not diagnose the coordinate PINN. Only five validation controls and one initialization are used.
 
-![FNO validation loss for 20 and 100 training examples](figures/fno_dataset_size.png)
+![FNO validation loss for 20 and 100 training examples](fno_dataset_size.png)
 
 The 100-example FNO has 65.75% mean final-time wave error on five exploratory cases. Aligning global phase leaves large errors. Normalizing predictions to unit probability increases mean relative density error from 50.28% to 55.14%, so amplitude rescaling alone is insufficient.
 
-![Supplementary final-time FNO density prediction for one exploratory control](figures/fno_prediction.png)
+![Supplementary final-time FNO density prediction for one exploratory control](fno_prediction.png)
 
 **Preliminary control optimization record.** The notebook retains a matched-objective search with solver-verified density errors 0.253400 (traditional) and 0.254834 (FNO-selected), and objectives 0.052612 versus 0.122382. Search times were 121.88 s and 0.21 s, with 323 versus 104 evaluations. This saved output predates the later FNO retraining in the interactive workflow. It is a preliminary record, not a freshly reproduced benchmark of the final 100-example checkpoint. The accompanying control-limit and post-hold outputs also include older saved runs. They are not used to claim final stationarity, a globally optimal control, or an accuracy-qualified speedup.
 
