@@ -25,9 +25,3 @@ The notebook generates synthetic data itself. No external experimental dataset i
 - Supplementary FNO exploratory final-state error: **65.75%**. Its fast inference is not an accuracy-qualified replacement for the solver.
 
 These are saved notebook measurements, not independently retrained results. The report separates earlier optimization outputs from final-model findings and does not mix the separate DeepONet implementation into this study.
-
-## Before final submission
-
-Confirm team authorship and permission for attributed interview material, complete a clean notebook run and the manual neural-error check, send the draft recommendation memo, record its delivery truthfully, and submit the public repository link. The report explicitly states the remaining limits on root-cause diagnosis.
-
-
