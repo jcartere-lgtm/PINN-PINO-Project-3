@@ -140,7 +140,7 @@ The training objective is
 
 $$
 L=L_{\rm data}+10^{-4}L_{\rm PDE}+L_{\rm IC}+L_{\rm BC},
-\qquad L_{\rm PDE}=\operatorname{mean}(r_1^2+r_2^2).
+\qquad L_{\rm PDE}=\mathrm{mean}(r_1^2+r_2^2).
 $$
 
 Data/IC terms compare real and imaginary components. The periodic boundary term compares values and first spatial derivatives at $-8$ and $8$. Each update samples 256 data points, 256 residual points, 64 initial points, and 64 paired boundary points. Spatial sampling is uniform over the full box. There is no norm penalty or hard initial-condition constraint. Automatic differentiation acts in physical coordinates, including the input scaling.
