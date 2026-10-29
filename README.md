@@ -30,4 +30,4 @@ These are saved notebook measurements, not independently retrained results. The 
 
 Confirm team authorship and permission for attributed interview material, complete a clean notebook run and the manual neural-error check, send the draft recommendation memo, record its delivery truthfully, and submit the public repository link. The report explicitly states the remaining limits on root-cause diagnosis.
 
-If the repository retains `Project3_Integrated_Submission`, it is a **separate implementation**, not the source of this report's numerical results.
+
